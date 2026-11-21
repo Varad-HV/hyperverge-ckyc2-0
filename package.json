@@ -1,0 +1,8 @@
+{
+  "name": "nia-ckyc-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NIA CKYC 2.0 journey demo (HyperVerge Web SDK)",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
