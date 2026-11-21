@@ -7,6 +7,7 @@
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const LOGO = 'assets/nia-logo.png';
+const API = (window.NIA_API_BASE || '').replace(/\/$/, '');
 
 /* ================= mini screens ================= */
 const STEP_NAMES = {
@@ -209,7 +210,7 @@ function loadSdk(version) {
 }
 
 async function init() {
-  try { const r = await fetch('/api/config'); if (!r.ok) throw new Error('no api'); CFG = await r.json(); }
+  try { const r = await fetch(API + '/api/config'); if (!r.ok) throw new Error('no api'); CFG = await r.json(); }
   catch (e) { CFG = null; setStatus('info', 'Guided preview: the live journey connects in the full demo environment'); return; }
   if (CFG.codeRequired && !sessionStorage.getItem('nia-code-ok')) { /* gate is shown on first launch only */ }
   if (!CFG.ready) { setStatus('err', 'Live journey is waiting for the appKey in the .env file'); return; }
@@ -245,7 +246,7 @@ async function launch(pan) {
   try {
     let code = sessionStorage.getItem('nia-code') || '';
     if (CFG.codeRequired && !code) { overlay.hidden = true; code = await gate(); overlay.hidden = false; }
-    const r = await fetch('/api/token', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
+    const r = await fetch(API + '/api/token', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
     const j = await r.json();
     if (r.status === 401) { sessionStorage.removeItem('nia-code'); throw new Error(j.message || 'Wrong access code'); }
     if (!r.ok) throw new Error(j.message || 'Could not start the journey');

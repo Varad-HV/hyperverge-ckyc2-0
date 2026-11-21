@@ -21,3 +21,11 @@ HyperVerge Web SDK workflow (`nia_ckyc_individual_demo`).
 ## GitHub Pages
 The `docs/` folder is the static site, so it can be published with GitHub Pages (Settings, Pages, branch `main`, folder `/docs`).
 On Pages there is no server, so there is no token endpoint: the page shows the guided walkthrough and a note that the live journey needs the full demo environment. The appKey is never part of the repo (`.env` is git-ignored).
+
+## Live journey from GitHub Pages (Cloudflare Worker)
+GitHub Pages cannot hold the appKey, so a small Worker mints the tokens:
+1. `cd worker && npx wrangler login`
+2. `npx wrangler secret put APP_KEY` (paste the key; optionally `npx wrangler secret put ACCESS_CODE`)
+3. `npx wrangler deploy`, then put the printed address in `docs/config.js` (`window.NIA_API_BASE`).
+4. Commit and push; Pages updates by itself.
+HyperVerge must also allow the Pages domain (`varad-hv.github.io`) for app `zz08tr`.

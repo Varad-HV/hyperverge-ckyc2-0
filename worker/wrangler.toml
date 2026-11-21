@@ -1,0 +1,14 @@
+name = "nia-ckyc-token"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+APP_ID = "zz08tr"
+WORKFLOW_ID = "nia_ckyc_individual_demo"
+SDK_VERSION = "12.0.0"
+# Sites allowed to call this service from a browser
+ALLOWED_ORIGINS = "https://varad-hv.github.io,http://localhost:8787"
+
+# Secrets are NOT stored here. Set them once with:
+#   npx wrangler secret put APP_KEY
+#   npx wrangler secret put ACCESS_CODE     (optional)
