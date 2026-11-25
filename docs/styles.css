@@ -277,6 +277,12 @@ a{color:inherit;text-decoration:none}
   .hero-facts{gap:22px}.foot-in{flex-direction:column;text-align:center}
 }
 .static .hero{min-height:900px}
+.jback{position:fixed;inset:0;z-index:250;background:transparent}
+.jback[hidden]{display:none}
+.jwrap{position:absolute;inset:0}
+.jframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;color-scheme:normal}
+.jclose{position:absolute;top:14px;right:16px;z-index:2;color:#fff;font-weight:600;font-size:13px;padding:6px 14px;border-radius:999px;background:rgba(0,20,52,.55);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(6px)}
+.jclose:hover{background:rgba(0,20,52,.75)}
 .section-head h2,.hero h1,.cta-band h2{text-wrap:balance}
 .section-head p,.lead{text-wrap:pretty}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}

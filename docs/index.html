@@ -7,6 +7,11 @@
 <meta name="description" content="Experience the CKYC 2.0 customer journey for New India Assurance, live.">
 <meta name="theme-color" content="#00367A">
 <link rel="icon" href="assets/nia-logo.png">
+<link rel="preconnect" href="https://hv-web-sdk-cdn.hyperverge.co" crossorigin>
+<link rel="preconnect" href="https://workflow-orchestrator.idv.hyperverge.co" crossorigin>
+<link rel="preconnect" href="https://config-cdn.hyperverge.co" crossorigin>
+<link rel="preconnect" href="https://i.postimg.cc" crossorigin>
+<link rel="preload" as="script" href="https://hv-web-sdk-cdn.hyperverge.co/hyperverge-web-sdk@11.7.0/src/sdk.min.js">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -181,7 +186,7 @@
     <div class="tech">
       <div class="tech-card reveal"><i class="t t1"></i><h4>DigiLocker</h4><p>Fetches Aadhaar and PAN straight from the government source, with consent enforced.</p><span class="tag live">Live</span></div>
       <div class="tech-card reveal"><i class="t t2"></i><h4>ID reading</h4><p>Reads passport, voter ID or driving licence, front and back, and pre-fills the form.</p><span class="tag live">Live</span></div>
-      <div class="tech-card reveal"><i class="t t3"></i><h4>Selfie liveness</h4><p>Confirms a real person is present: blur, closed eyes, sunglasses and multiple faces are caught.</p><span class="tag live">Live</span></div>
+      <div class="tech-card reveal"><i class="t t3"></i><h4>Selfie check (consent)</h4><p>When an existing customer chooses a selfie as consent: blur, closed eyes, sunglasses and multiple faces are caught. New customers are not asked for a selfie.</p><span class="tag live">Live</span></div>
       <div class="tech-card reveal"><i class="t t4"></i><h4>Government databases</h4><p>Checks passport (MEA), voter ID (ECI) and driving licence (MoRTH) at the source.</p><span class="tag live">Live</span></div>
       <div class="tech-card reveal"><i class="t t5"></i><h4>Name matching</h4><p>Compares policy, ID and registry names with spelling tolerance, ignoring honorifics.</p><span class="tag live">Live</span></div>
       <div class="tech-card reveal"><i class="t t6"></i><h4>PAN verification</h4><p>Validates the PAN with NSDL. Configurable, switched off in this demo.</p><span class="tag cfg">Configurable</span></div>
@@ -225,6 +230,14 @@
   </div>
 </div>
 
+<!-- journey frame: the SDK runs in here, isolated from the page's CSS -->
+<div class="jback" id="jBack" hidden>
+  <div class="jwrap">
+    <button class="jclose" id="jClose" aria-label="Close the journey">Close demo</button>
+    <iframe id="jf" class="jframe" title="NIA CKYC journey" allow="camera *; microphone *; geolocation *; fullscreen *; clipboard-write *"></iframe>
+  </div>
+</div>
+
 <!-- launching overlay -->
 <div class="launching" id="launching" hidden>
   <div class="launch-card">
@@ -234,6 +247,7 @@
   </div>
 </div>
 
+<script async id="hvSdk" src="https://hv-web-sdk-cdn.hyperverge.co/hyperverge-web-sdk@11.7.0/src/sdk.min.js"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>

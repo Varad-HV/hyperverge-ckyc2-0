@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NIA CKYC journey</title>
+<!-- Deliberately bare: no site CSS, so nothing from the demo page can touch the SDK. -->
+<style>html,body{margin:0;height:100%;background:transparent}</style>
+<script src="https://hv-web-sdk-cdn.hyperverge.co/hyperverge-web-sdk@11.7.0/src/sdk.min.js"></script>
+</head>
+<body>
+<script>
+(function () {
+  var q = new URLSearchParams(location.hash.slice(1));
+  function send(res) { try { parent.postMessage({ type: 'nia-result', result: res }, location.origin); } catch (e) {} }
+  function start(n) {
+    if (!(window.HyperKYCModule && window.HyperKycConfig)) {
+      if (n > 200) return send({ status: 'error', errorMessage: 'Could not load the HyperVerge SDK' });
+      return setTimeout(function () { start(n + 1); }, 100);
+    }
+    try {
+      var inputs = {}; try { inputs = JSON.parse(q.get('i') || '{}'); } catch (e) {}
+      // token is used exactly as returned, including the "Bearer " prefix
+      var cfg = new HyperKycConfig(q.get('t'), q.get('w'), q.get('x'), false);
+      cfg.setInputs(inputs);
+      cfg.supportDarkMode(false);
+      cfg.setInitialLoaderColor('#00367A');
+      cfg.setDefaultLangCode('en');
+      cfg.setUseLocation(false);
+      parent.postMessage({ type: 'nia-started' }, location.origin);
+      HyperKYCModule.launch(cfg, send);
+    } catch (e) { send({ status: 'error', errorMessage: String(e && e.message || e) }); }
+  }
+  start(0);
+})();
+</script>
+</body>
+</html>

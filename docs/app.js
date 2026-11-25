@@ -34,8 +34,7 @@ const STORY = {
   exist: [
     { // 1
       card: ['What they see', 'A friendly welcome that explains what is about to happen. No forms yet.', 'Behind the scenes', 'Policy details arrive from NIA. The journey starts in the right place automatically.'],
-      frames: [p => screen(p, 0, `<h5>Get your CKYC in a few taps</h5><p>We will check if you already have a CKYC record. If you do, you can have it in about two minutes.</p>
-        <div class="card"><em>WHAT YOU NEED</em><p>Your PAN or mobile number, and your phone for an OTP.</p></div>`, 'Get started')]
+      frames: [p => screen(p, 0, `<h5>Verify your KYC</h5><p>We will check if you already have a CKYC record. This takes a few minutes.</p><div class="opt" style="border:0;padding-left:0"><i class="rd" style="border-radius:3px"></i><span>I agree to share my details for KYC verification.</span></div>`, 'Continue')]
     },
     { // 2
       card: ['What they see', 'They confirm their PAN or mobile. A short "checking" moment, then the answer.', 'Behind the scenes', 'CKYC registry search. The name on the record is matched to the policy, so the wrong person never gets a record.'],
@@ -47,8 +46,8 @@ const STORY = {
     { // 3
       card: ['What they see', 'They choose how to give consent: an OTP, a quick selfie, or a signed form if no phone or email is on record.', 'Behind the scenes', 'OTP to the registered contact, face authentication, or a physical consent form, whichever suits the record.'],
       frames: [
-        p => screen(p, 2, `<h5>How would you like to give consent?</h5><p>We need your permission to fetch your record.</p>${opt('Get an OTP', 'Sent to XXXXXX1234 and a***@mail.com', true)}${opt('Take a selfie', 'We match your face to the record')}${opt('Upload a signed form', 'If no mobile or email is on record')}`, 'Continue'),
-        p => screen(p, 2, `<h5>Enter the OTP</h5><p>We sent a 6-digit code to XXXXXX1234.</p><div class="otp"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i></div>`, 'Verify')
+        p => screen(p, 2, `<h5>We found your CKYC record</h5><p>Choose how you want to give consent to fetch it.</p>${opt('Get an OTP', 'Sent to XXXXXX1234 and a***@mail.com', true)}${opt('Verify with a selfie', 'We match your live photo with your record')}`, 'Continue'),
+        p => screen(p, 2, `<h5>Enter the OTP</h5><p>We sent a 6 digit OTP to XXXXXX1234 and a***@mail.com.</p><div class="otp"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i></div>`, 'Verify')
       ]
     },
     { // 4
@@ -64,8 +63,7 @@ const STORY = {
   new: [
     { // 1
       card: ['What they see', 'The same friendly start for everyone.', 'Behind the scenes', 'Nothing to configure per customer: the journey adapts itself.'],
-      frames: [p => screen(p, 0, `<h5>Get your CKYC in a few taps</h5><p>We will check if you already have a CKYC record. If you do not, we will help you create one.</p>
-        <div class="card"><em>WHAT YOU NEED</em><p>Your phone and an ID: Aadhaar through DigiLocker, or a passport, voter ID or driving licence.</p></div>`, 'Get started')]
+      frames: [p => screen(p, 0, `<h5>Verify your KYC</h5><p>We will check if you already have a CKYC record. This takes a few minutes.</p><div class="opt" style="border:0;padding-left:0"><i class="rd" style="border-radius:3px"></i><span>I agree to share my details for KYC verification.</span></div>`, 'Continue')]
     },
     { // 2
       card: ['What they see', 'A clear message that there is no record yet, and that they are about to create one.', 'Behind the scenes', 'CKYC registry search returns no match, so the new-customer path begins.'],
@@ -75,11 +73,13 @@ const STORY = {
       ]
     },
     { // 3
-      card: ['What they see', 'They verify with DigiLocker in one tap, or photograph an ID (front, then back, with a preview), then take a quick selfie.', 'Behind the scenes', 'DigiLocker with Aadhaar consent enforced, or ID reading plus a government database check. Selfie liveness catches blur, closed eyes, sunglasses and extra faces.'],
+      card: ['What they see', 'They verify with DigiLocker in one tap, or photograph an ID (front, then back, each with a preview), then confirm their PAN. No selfie is needed.', 'Behind the scenes', 'DigiLocker with Aadhaar consent enforced, or ID reading plus a government database check (passport, voter ID or driving licence). The PAN is checked and the names are matched against the policy.'],
       frames: [
         p => screen(p, 2, `<h5>Let's verify you now</h5><p>Choose how you want to verify.</p>${opt('DigiLocker', 'Fetch your Aadhaar and PAN securely', true)}${opt('Another ID', 'Driving licence, voter ID or passport')}`, 'Continue'),
         p => screen(p, 2, `<h5>Capture the front of your Passport</h5><p>Place the whole card inside the frame. All four corners must be visible.</p><div class="doc">Front side · Step 1 of 2</div>`, 'Take photo'),
-        p => screen(p, 2, `<h5>Take a quick selfie</h5><p>Look straight at the camera in good light.</p><div class="face"></div>`, 'Capture')
+        p => screen(p, 2, `<h5>Check the front of your Passport</h5><p>Make sure all four corners are visible and every letter is readable.</p><div class="doc" style="height:110px">Preview of your photo</div>`, 'Use this photo', 'Retake'),
+        p => screen(p, 2, `<h5>Capture the back of your Passport</h5><p>Now turn the card over. All four corners must be visible.</p><div class="doc">Back side · Step 2 of 2</div>`, 'Take photo'),
+        p => screen(p, 2, `<h5>Add your PAN</h5><p>Enter your PAN number.</p>${field('PAN number', 'ABCDE1234F')}`, 'Continue')
       ]
     },
     { // 4
@@ -94,11 +94,11 @@ const STORY = {
       ]
     },
     { // 5
-      card: ['What they see', 'A short declaration, one last review of everything, then it is on its way to the CKYC registry.', 'Behind the scenes', 'The record is uploaded to the CKYC registry. NIA gets the status and the acknowledgement number, and the customer is done.'],
+      card: ['What they see', 'A short declaration, one last review of everything, then it is on its way to the CKYC registry.', 'Behind the scenes', 'The record is uploaded to the CKYC registry. NIA gets the status and the acknowledgement number, and the customer\'s journey ends.'],
       frames: [
         p => screen(p, 4, `<h5>Declaration</h5><p>I confirm that the details I have given are true and correct, and I consent to them being uploaded to the CKYC registry.</p>${field('Place', 'Mumbai')}${field('Date', '21-11-2026')}`, 'Continue'),
         p => screen(p, 4, `<h5>Review your details</h5><p>Check everything before we submit.</p><div style="margin-top:6px">${kv('Name', 'Priya Sharma')}${kv('Date of birth', '14-03-1992')}${kv('ID', 'Passport ••••5678')}${kv('Address', 'Silvassa 396230')}</div>`, 'Submit', 'Edit'),
-        p => screen(p, 4, `${tick}<h5>Details submitted</h5><p>We have sent your details to the CKYC registry.</p>`, 'Done')
+        p => screen(p, 4, `<div class="ld"></div><h5>Submitting your details…</h5><p>This usually takes a few seconds.</p>`)
       ]
     }
   ]
@@ -195,6 +195,18 @@ const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting
 if (location.search.includes('static')) { document.documentElement.classList.add('static'); $$('.reveal').forEach(el => el.classList.add('in')); }
 $$('.reveal').forEach((el, i) => { if (!el.style.getPropertyValue('--d')) el.style.setProperty('--d', (i % 4) * .06 + 's'); io.observe(el); });
 
+/* ================= warm-up: fetch what the journey needs before it is asked for ================= */
+const WARM_IMAGES = ['4NdD6QF8/progress-1-get-started', 'BQ6rTBwz/progress-2-find-record', 'BQ6rTBwV/progress-3-give-consent', 'SNsB6ftB/progress-3-verify-identity', 'hPjkL136/progress-4-get-record', 'Wb3BGwfQ/progress-4-your-details', 'sDXkY40b/progress-5-all-done', 'zXc90H9p/progress-5-review-submit', 'PfcgMwsn/nialogorect'].map(p => `https://i.postimg.cc/${p}.png`);
+const WARM_SDK = ['ui-bundle/1.0/stable/bundle.core.js', 'ui-bundle/1.0/stable/bundle.core.css', 'ui-bundle/assets/common/bundle.common.Bkg9cn4B.js', 'ui-bundle/assets/dynamic-form/bundle.dynamic-form.CyqHhEEp.js', 'ui-bundle/assets/preload-helper/bundle.preload-helper.C1FmrZbK.js'].map(p => 'https://hv-web-sdk-cdn.hyperverge.co/' + p);
+let warmedImages = false, lastBundleWarm = 0;
+function warm() {
+  if (!warmedImages) { warmedImages = true; WARM_IMAGES.forEach(u => { const i = new Image(); i.decoding = 'async'; i.src = u; }); }
+  // the SDK files are only cacheable for 60s, so refresh them shortly before use (on hover/focus of a scenario)
+  if (Date.now() - lastBundleWarm > 45000) { lastBundleWarm = Date.now(); WARM_SDK.forEach(u => fetch(u, { mode: 'no-cors' }).catch(() => {})); fetch('https://config-cdn.hyperverge.co/sdk-client-config/hypersnapsdk/v1/default.json', { mode: 'no-cors' }).catch(() => {}); }
+}
+if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 2500 }); else setTimeout(warm, 1500);
+['pointerover', 'focusin', 'touchstart'].forEach(ev => document.addEventListener(ev, e => { if (e.target.closest && e.target.closest('.sc,#startFresh,[data-scroll="#live"]')) warm(); }, { passive: true }));
+
 /* ================= SDK: config, prefetch, launch ================= */
 let CFG = null, sdkReady = false, prefetched = false;
 const statusEl = $('#prefetchStatus');
@@ -202,6 +214,16 @@ function setStatus(kind, text) { statusEl.className = 'status ' + kind; statusEl
 
 function loadSdk(version) {
   return new Promise((res, rej) => {
+    // the SDK tag is already in the page (loads in parallel with everything else): just wait for it
+    if (window.HyperKYCModule && window.HyperKycConfig) return res();
+    const tag = document.getElementById('hvSdk');
+    if (tag && version === '11.7.0') {
+      let n = 0; const iv = setInterval(() => {
+        if (window.HyperKYCModule && window.HyperKycConfig) { clearInterval(iv); res(); }
+        else if (++n > 600) { clearInterval(iv); rej(new Error('Could not load the HyperVerge SDK')); }
+      }, 100);
+      return;
+    }
     const s = document.createElement('script');
     s.src = `https://hv-web-sdk-cdn.hyperverge.co/hyperverge-web-sdk@${version}/src/sdk.min.js`;
     s.onload = res; s.onerror = () => rej(new Error('Could not load the HyperVerge SDK'));
@@ -256,15 +278,9 @@ async function launch(pan) {
     const holder = $('#holder').value.trim();
     const inputs = { policyholderName: holder || 'NA', gender: 'NA', dob: 'NA', mobileNumber: 'NA', email: 'NA', panNumber: pan || 'NA' };
 
-    // token is passed exactly as returned, including the "Bearer " prefix
-    const config = new window.HyperKycConfig(j.token, j.workflowId, j.transactionId, false);
-    config.setInputs(inputs);
-    config.supportDarkMode(false);
-    config.setInitialLoaderColor('#00367A');
-    config.setDefaultLangCode('en');
-    config.setUseLocation(false);
-    await window.HyperKYCModule.launch(config, onResult);
-    setTimeout(() => { overlay.hidden = true; }, 600);
+    // The journey runs in its own phone-sized frame (journey.html has no site CSS),
+    // so nothing from this page can affect the SDK's layout.
+    openFrame(`journey.html#t=${encodeURIComponent(j.token)}&w=${encodeURIComponent(j.workflowId)}&x=${encodeURIComponent(j.transactionId)}&i=${encodeURIComponent(JSON.stringify(inputs))}`);
   } catch (e) {
     overlay.hidden = true; toast(e.message || 'Could not start the journey');
     launching = false; $$('.sc').forEach(b => b.classList.remove('busy')); $('#startFresh').disabled = false;
@@ -272,6 +288,17 @@ async function launch(pan) {
 }
 $('#scenarios').addEventListener('click', e => { const b = e.target.closest('.sc'); if (b) launch(SCENARIOS[+b.dataset.i].pan); });
 $('#startFresh').addEventListener('click', () => launch(''));
+
+/* ================= journey frame ================= */
+const jBack = $('#jBack'), jf = $('#jf');
+function openFrame(src) { jf.src = src; jBack.hidden = false; document.body.style.overflow = 'hidden'; }
+function closeFrame() { jBack.hidden = true; jf.src = 'about:blank'; document.body.style.overflow = ''; $('#launching').hidden = true; }
+addEventListener('message', e => {
+  if (e.origin !== location.origin || !e.data) return;
+  if (e.data.type === 'nia-started') $('#launching').hidden = true;
+  if (e.data.type === 'nia-result') { closeFrame(); onResult(e.data.result); }
+});
+$('#jClose').addEventListener('click', () => { closeFrame(); onResult({ status: 'user_cancelled', errorCode: 103, errorMessage: 'Workflow cancelled by user' }); });
 
 /* ================= result ================= */
 const ICONS = {

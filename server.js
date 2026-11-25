@@ -28,13 +28,13 @@ function settings() {
   return {
     APP_ID: g('APP_ID'), APP_KEY: g('APP_KEY'),
     WORKFLOW_ID: g('WORKFLOW_ID') || 'nia_ckyc_individual_demo',
-    SDK_VERSION: g('SDK_VERSION') || '12.0.0',
+    SDK_VERSION: g('SDK_VERSION') || '11.7.0',
     AUTH_HOST: g('AUTH_HOST') || 'auth-ind.idv.hyperverge.co',
     ACCESS_CODE: g('ACCESS_CODE') // optional: gate the live demo behind a code
   };
 }
 const PORT = parseInt(process.env.PORT || readEnvFile().PORT || '8787', 10);
-const TOKEN_EXPIRY = 1800; // seconds
+const TOKEN_EXPIRY = 14400; // seconds (4 hours, so a long demo never outlives its token)
 
 const PUBLIC = path.join(__dirname, 'docs');
 const TYPES = {
@@ -128,7 +128,7 @@ const server = http.createServer(async (req, res) => {
   fs.readFile(file, (err, data) => {
     if (err) return send(res, 404, 'Not found', { 'Content-Type': 'text/plain' });
     const ext = path.extname(file).toLowerCase();
-    send(res, 200, data, { 'Content-Type': TYPES[ext] || 'application/octet-stream', 'Cache-Control': ext === '.html' ? 'no-store' : 'public, max-age=3600' });
+    send(res, 200, data, { 'Content-Type': TYPES[ext] || 'application/octet-stream', 'Cache-Control': ['.html', '.js', '.css'].includes(ext) ? 'no-cache' : 'public, max-age=3600' });
   });
 });
 
