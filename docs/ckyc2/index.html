@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CKYC 2.0 journey · HyperVerge</title>
+<meta name="description" content="Experience the CKYC 2.0 customer journey and every type of consent, live. Built by HyperVerge.">
+<meta name="theme-color" content="#00367A">
+<link rel="icon" href="hv-mark.svg">
+<link rel="preconnect" href="https://hv-web-sdk-cdn.hyperverge.co" crossorigin>
+<link rel="preconnect" href="https://workflow-orchestrator.idv.hyperverge.co" crossorigin>
+<link rel="preconnect" href="https://config-cdn.hyperverge.co" crossorigin>
+<link rel="preconnect" href="https://i.postimg.cc" crossorigin>
+<link rel="preload" as="script" href="https://hv-web-sdk-cdn.hyperverge.co/hyperverge-web-sdk@11.7.0/src/sdk.min.js">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="ckyc2.css">
+</head>
+<body>
+
+<!-- gate for optional access code -->
+<div class="gate" id="gate" hidden>
+  <div class="gate-card">
+    <img src="hv-mark.svg" alt="HyperVerge" class="gate-logo">
+    <h2>Enter the access code</h2>
+    <p>This live demo is protected. Ask your HyperVerge contact for the code.</p>
+    <input id="gateInput" type="password" autocomplete="off" placeholder="Access code">
+    <button class="btn btn-primary" id="gateGo">Continue</button>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
+</div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="HyperVerge"><span class="wm"><i><svg viewBox="0 0 24 24"><path d="M7 6v12M17 6v12M7 12h10"/></svg></i>HyperVerge</span></a>
+  <nav class="nav-links">
+    <a href="#journey">The journey</a>
+    <a href="#consents">Consents</a>
+    <a href="#live">Try it live</a>
+    <a href="#outcomes">Outcomes</a>
+    <a href="#inside">Behind the scenes</a>
+  </nav>
+  <button class="btn btn-light btn-sm" data-scroll="#live">Start the demo</button>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div>
+  <div class="grid-fade"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="dot"></span> CKYC 2.0 · Individual journey</div>
+      <h1>Know your customer,<br><span class="grad">in minutes, not days.</span></h1>
+      <p class="lead">See exactly what a policyholder experiences: find an existing CKYC record with one tap, or complete a new KYC on their phone. Every consent captured, in plain language. Fully digital, nothing printed, nothing posted.</p>
+      <div class="for-client" data-client-show hidden>Prepared for&nbsp;<span data-client></span></div>
+      <div class="cta-row">
+        <button class="btn btn-primary btn-lg" data-scroll="#live">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+          Start the live demo
+        </button>
+        <button class="btn btn-ghost btn-lg" data-scroll="#consents">See every consent</button>
+      </div>
+      <ul class="hero-facts">
+        <li><b>5</b><span>simple steps</span></li>
+        <li><b>8</b><span>consent moments, all covered</span></li>
+        <li><b>100%</b><span>on the customer's phone</span></li>
+      </ul>
+    </div>
+
+    <div class="hero-phone">
+      <div class="phone float" id="heroPhone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" id="heroScreen"></div>
+      </div>
+      <div class="chip c1"><i class="ic ok"></i> Record found</div>
+      <div class="chip c2"><i class="ic shield"></i> Consent captured</div>
+      <div class="chip c3"><i class="ic bolt"></i> Under 2 minutes*</div>
+    </div>
+  </div>
+  <a class="scroll-hint" href="#journey" aria-label="Scroll"><span></span></a>
+</section>
+
+<!-- ============ JOURNEY ============ -->
+<section id="journey" class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow dark">The customer's view</div>
+      <h2>Two paths. One smooth journey.</h2>
+      <p>Every customer starts the same way. What happens next depends on whether the CKYC registry already knows them. Pick a path and follow it, screen by screen.</p>
+    </div>
+
+    <div class="path-switch reveal" id="pathSwitch" role="tablist">
+      <button class="on" data-path="exist" role="tab"><b>Already in CKYC</b><span>Get the record with their consent</span></button>
+      <button data-path="new" role="tab"><b>New to CKYC</b><span>Verify once and submit to the registry</span></button>
+      <i class="knob"></i>
+    </div>
+
+    <div class="story reveal">
+      <ol class="steps" id="steps"></ol>
+      <div class="story-stage">
+        <div class="phone large" id="storyPhone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen" id="storyScreen"></div>
+        </div>
+        <div class="stage-card" id="stageCard"></div>
+      </div>
+    </div>
+    <p class="footnote reveal">*Typical for a customer with a record and a phone in hand. Timings vary with the consent method and network.</p>
+  </div>
+</section>
+
+<!-- ============ CONSENTS ============ -->
+<section id="consents" class="section tint">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow dark">Consent, done properly</div>
+      <h2>Every consent, in the customer's own words.</h2>
+      <p>CKYC 2.0 is built on the customer's permission. Choose a consent below to see the screens, what the customer is agreeing to, and what happens if they say no.</p>
+    </div>
+
+    <div class="story cx reveal" id="cStage">
+      <ol class="steps" id="cList"></ol>
+      <div class="story-stage">
+        <div class="phone large">
+          <div class="phone-notch"></div>
+          <div class="phone-screen" id="cScreen"></div>
+        </div>
+        <div class="stage-card" id="cCard"></div>
+      </div>
+    </div>
+
+    <div class="section-head reveal" style="margin-top:84px;margin-bottom:28px">
+      <h2 style="font-size:clamp(24px,3vw,34px)">Consent at a glance</h2>
+    </div>
+    <div class="mx-wrap reveal">
+    <table class="mx">
+      <thead><tr><th>Consent</th><th>When</th><th>How the customer gives it</th><th>If not given</th></tr></thead>
+      <tbody>
+        <tr><td>Start of journey</td><td>First screen</td><td>Ticks the agreement checkbox</td><td>Cannot continue</td></tr>
+        <tr><td>OTP</td><td>Existing record</td><td>Enters the OTP sent to the registered mobile or email</td><td>Retries, then not completed</td></tr>
+        <tr><td>Selfie + face details</td><td>Existing record</td><td>Live selfie plus one detail from the record</td><td>Guided retake, then not completed</td></tr>
+        <tr><td>Signed form</td><td>Record has no mobile or email</td><td>Downloads, signs and uploads the form</td><td>Upload again, then consent not accepted</td></tr>
+        <tr><td>Aadhaar (DigiLocker)</td><td>New customer</td><td>Allows sharing on the DigiLocker screen</td><td>Try again, or use another ID</td></tr>
+        <tr><td>Form 97</td><td>New customer, no PAN</td><td>Ticks the declaration</td><td>Enters a PAN instead</td></tr>
+        <tr><td>Declaration and upload</td><td>End of a new record</td><td>Confirms the details and agrees to the upload</td><td>Edits, or does not submit</td></tr>
+        <tr><td>Consent not accepted</td><td>Any refusal</td><td>A clear stop screen, with a way to get help</td><td>Nothing is fetched or uploaded</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVE ============ -->
+<section id="live" class="section live">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow dark">Hands on</div>
+      <h2>Now try it yourself, live.</h2>
+      <p>This launches the real HyperVerge journey inside this page. Pick a scenario, and you will go through the exact screens a customer sees, including the consent screens above.</p>
+      <div class="status" id="prefetchStatus"><i class="spin"></i><span>Preloading the journey…</span></div>
+    </div>
+
+    <div class="name-row reveal">
+      <label for="holder">Policyholder name <em>optional</em></label>
+      <input id="holder" type="text" placeholder="Leave blank to use the name on the ID" maxlength="60" autocomplete="off">
+      <small>The insurer passes this in from the policy. Enter a name that differs from the ID to see how a name mismatch is handled.</small>
+    </div>
+
+    <div class="scenarios" id="scenarios"></div>
+
+    <div class="own reveal">
+      <div>
+        <b>Prefer to explore from the very beginning?</b>
+        <span>Start with the journey chooser, the way a first-time visitor would.</span>
+      </div>
+      <button class="btn btn-primary" id="startFresh">Start from the beginning</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OUTCOMES ============ -->
+<section id="outcomes" class="section tint">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow dark">Nothing is left to chance</div>
+      <h2>Every outcome is handled, and clearly explained.</h2>
+      <p>Whatever happens during the journey, the customer sees a plain-language screen with a next step, and your systems receive a clear status to act on.</p>
+    </div>
+    <div class="outcomes">
+      <article class="out good reveal">
+        <div class="out-ic"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Approved</h3>
+        <p>Record retrieved, or new details accepted by the registry. The customer is done.</p>
+        <ul><li>Existing CKYC record downloaded</li><li>New record submitted</li><li>Customer already in CKYC at upload</li></ul>
+      </article>
+      <article class="out warn reveal">
+        <div class="out-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 7.5v5l3 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+        <h3>Needs review</h3>
+        <p>Something needs a human eye. The customer is told the insurer will be in touch.</p>
+        <ul><li>Name does not match the policy</li><li>An ID could not be verified</li><li>Consent form not accepted</li></ul>
+      </article>
+      <article class="out bad reveal">
+        <div class="out-ic"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></div>
+        <h3>Declined</h3>
+        <p>The customer could not complete verification after the allowed attempts.</p>
+        <ul><li>OTP attempts used up</li><li>Selfie liveness failed</li><li>Face details did not match</li></ul>
+      </article>
+    </div>
+    <div class="guards reveal">
+      <div><b>Aadhaar consent is enforced</b><span>If a customer does not allow it in DigiLocker, Aadhaar is never fetched. They are offered another way instead.</span></div>
+      <div><b>Retries before giving up</b><span>Unreadable photo, DigiLocker hiccup or wrong PAN: the customer gets a clear fix and another go.</span></div>
+      <div><b>Names are matched, not assumed</b><span>The name on the ID, on the policy and in the registry are compared, with spelling tolerance and honorifics ignored.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONFIGURE ============ -->
+<section id="configure" class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow dark">Made to fit</div>
+      <h2>Your rules, your brand.</h2>
+      <p>The journey is a configuration, not a fixed product. The main choices a general insurer makes are below.</p>
+    </div>
+    <div class="cfg-grid reveal">
+      <div><b>Consent methods</b><span>Offer OTP, selfie, signed form, or any mix, and choose which comes first.</span></div>
+      <div><b>Identity documents</b><span>DigiLocker, passport, voter ID and driving licence, each switched on or off.</span></div>
+      <div><b>Checks and thresholds</b><span>PAN verification, government database checks and how strict the name match is.</span></div>
+      <div><b>Inputs from your system</b><span>Policyholder name, PAN, mobile, email and more arrive from the policy, so the customer never retypes them.</span></div>
+      <div><b>Your wording and brand</b><span>Logo, colours and every line of text, including other languages.</span></div>
+      <div><b>Your systems</b><span>Status and details are returned to you as one clear result.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSIDE ============ -->
+<section id="inside" class="section tint">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow dark">Under the hood</div>
+      <h2>What runs behind each screen.</h2>
+      <p>The customer sees a few simple screens. Behind them, HyperVerge connects the checks needed for CKYC 2.0, and hands back one clear answer.</p>
+    </div>
+    <div class="tech">
+      <div class="tech-card reveal"><i class="t t1"></i><h4>DigiLocker</h4><p>Fetches Aadhaar and PAN straight from the government source, with consent enforced.</p><span class="tag live">Live</span></div>
+      <div class="tech-card reveal"><i class="t t2"></i><h4>ID reading</h4><p>Reads passport, voter ID or driving licence, front and back, and pre-fills the form.</p><span class="tag live">Live</span></div>
+      <div class="tech-card reveal"><i class="t t3"></i><h4>Selfie check (consent)</h4><p>When an existing customer chooses a selfie as consent: blur, closed eyes, sunglasses and multiple faces are caught.</p><span class="tag live">Live</span></div>
+      <div class="tech-card reveal"><i class="t t4"></i><h4>Government databases</h4><p>Checks passport (MEA), voter ID (ECI) and driving licence (MoRTH) at the source.</p><span class="tag live">Live</span></div>
+      <div class="tech-card reveal"><i class="t t5"></i><h4>Name matching</h4><p>Compares policy, ID and registry names with spelling tolerance, ignoring honorifics.</p><span class="tag live">Live</span></div>
+      <div class="tech-card reveal"><i class="t t6"></i><h4>PAN verification</h4><p>Validates the PAN with NSDL. Configurable, switched off in this demo.</p><span class="tag cfg">Configurable</span></div>
+      <div class="tech-card reveal"><i class="t t7"></i><h4>CKYC registry</h4><p>Search, download and upload to the central registry. Simulated here, ready for your credentials.</p><span class="tag sim">Simulated</span></div>
+      <div class="tech-card reveal"><i class="t t8"></i><h4>One clear result</h4><p>Approved, needs review or declined, with the data you need, delivered to your systems.</p><span class="tag live">Live</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
+    <h2>Ready to see it on a phone?</h2>
+    <p>Open this page on your phone and run the same journey. It works in any modern mobile browser, with nothing to install.</p>
+    <button class="btn btn-light btn-lg" data-scroll="#live">Start the live demo</button>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <img src="hv-mark.svg" alt="HyperVerge" style="height:36px;width:auto;border-radius:6px">
+    <span>CKYC 2.0 journey demo · HyperVerge</span>
+  </div>
+</footer>
+
+<!-- toast -->
+<div class="toast" id="toast" role="status"></div>
+
+<!-- result sheet -->
+<div class="sheet-back" id="sheetBack" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-ic" id="sheetIc"></div>
+    <h3 id="sheetTitle"></h3>
+    <p id="sheetText"></p>
+    <div class="kv" id="sheetKv"></div>
+    <details class="raw"><summary>What your systems receive</summary><pre id="sheetRaw"></pre></details>
+    <div class="sheet-actions">
+      <button class="btn btn-primary" id="sheetAgain">Try another scenario</button>
+      <button class="btn btn-ghost-dark" id="sheetClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- journey frame: the SDK runs in here, isolated from the page's CSS -->
+<div class="jback" id="jBack" hidden>
+  <div class="jwrap">
+    <button class="jclose" id="jClose" aria-label="Close the journey">Close demo</button>
+    <iframe id="jf" class="jframe" title="CKYC journey" allow="camera *; microphone *; geolocation *; fullscreen *; clipboard-write *"></iframe>
+  </div>
+</div>
+
+<!-- launching overlay -->
+<div class="launching" id="launching" hidden>
+  <div class="launch-card">
+    <img src="hv-mark.svg" alt="">
+    <div class="bar"><i></i></div>
+    <p>Getting your journey ready…</p>
+  </div>
+</div>
+
+<script async id="hvSdk" src="https://hv-web-sdk-cdn.hyperverge.co/hyperverge-web-sdk@11.7.0/src/sdk.min.js"></script>
+<script src="../config.js"></script>
+<script src="ckyc2.js"></script>
+</body>
+</html>

@@ -122,7 +122,7 @@ const server = http.createServer(async (req, res) => {
 
   // static files, only from ./public
   let p = decodeURIComponent(url.pathname);
-  if (p === '/') p = '/index.html';
+  if (p.endsWith('/')) p += 'index.html';
   const file = path.normalize(path.join(PUBLIC, p));
   if (!file.startsWith(PUBLIC + path.sep)) return send(res, 403, 'Forbidden', { 'Content-Type': 'text/plain' });
   fs.readFile(file, (err, data) => {
